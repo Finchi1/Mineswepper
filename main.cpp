@@ -5,7 +5,7 @@
 
 using namespace sf;
 
-// Один массив для хранения информации об внутреннем состоянии поля и один для внешнего
+// РћРґРёРЅ РјР°СЃСЃРёРІ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РёРЅС„РѕСЂРјР°С†РёРё РѕР± РІРЅСѓС‚СЂРµРЅРЅРµРј СЃРѕСЃС‚РѕСЏРЅРёРё РїРѕР»СЏ Рё РѕРґРёРЅ РґР»СЏ РІРЅРµС€РЅРµРіРѕ
 std::array <std::array <int, 10>, 10> field_in{ 0 };
 std::array <std::array <int, 10>, 10> field_out{ 0 };
 
@@ -19,17 +19,17 @@ int main()
 	settings.antialiasingLevel = 8;
 	RenderWindow window(VideoMode(384, 384), "Minesweeper", Style::Default, settings);
 
-	// Создаем и загружаем текстуры
+	// РЎРѕР·РґР°РµРј Рё Р·Р°РіСЂСѓР¶Р°РµРј С‚РµРєСЃС‚СѓСЂС‹
 	Texture texture_cube;
-	texture_cube.loadFromFile("C:\\Users\\Finchi\\source\\repos\\SFML_Mineswepper\\Minesweeper.jpg");
+	texture_cube.loadFromFile("Minesweeper.jpg");
 	Texture texture_reset;
-	texture_reset.loadFromFile("C:\\Users\\Finchi\\source\\repos\\SFML_Mineswepper\\Reset.png");
+	texture_reset.loadFromFile("Reset.png");
 
-	// Создаем и загружаем шрифт
+	// РЎРѕР·РґР°РµРј Рё Р·Р°РіСЂСѓР¶Р°РµРј С€СЂРёС„С‚
 	Font font;
-	font.loadFromFile("C:\\Users\\Finchi\\source\\repos\\SFML_Mineswepper\\CyrilicOld.TTF");
+	font.loadFromFile("CyrilicOld.TTF");
 
-	// Массив всех спрайтов что нужны на на поле
+	// РњР°СЃСЃРёРІ РІСЃРµС… СЃРїСЂР°Р№С‚РѕРІ С‡С‚Рѕ РЅСѓР¶РЅС‹ РЅР° РЅР° РїРѕР»Рµ
 	std::array <Sprite, 12> sprites;
 	for (int s = 0; s < sprites.size(); s++)
 	{
@@ -37,43 +37,43 @@ int main()
 		sprites.at(s).setTextureRect(IntRect(s * 32, 0, 32, 32));
 	}
 
-	// Заполняем элементы "внешнего" массива начальными значениями
+	// Р—Р°РїРѕР»РЅСЏРµРј СЌР»РµРјРµРЅС‚С‹ "РІРЅРµС€РЅРµРіРѕ" РјР°СЃСЃРёРІР° РЅР°С‡Р°Р»СЊРЅС‹РјРё Р·РЅР°С‡РµРЅРёСЏРјРё
 	for (int x = 0; x < field_out.size(); x++)
 		for (int y = 0; y < field_out.at(x).size(); y++)
 			field_out.at(x).at(y) = 10;
 
-	// Заполняем элементы "внутреннего" массива начальными значениями
-	// Это нужно для начала новой игры после нажатия кнопки Reset, иначе в массиве сохранятся старые значения
+	// Р—Р°РїРѕР»РЅСЏРµРј СЌР»РµРјРµРЅС‚С‹ "РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ" РјР°СЃСЃРёРІР° РЅР°С‡Р°Р»СЊРЅС‹РјРё Р·РЅР°С‡РµРЅРёСЏРјРё
+	// Р­С‚Рѕ РЅСѓР¶РЅРѕ РґР»СЏ РЅР°С‡Р°Р»Р° РЅРѕРІРѕР№ РёРіСЂС‹ РїРѕСЃР»Рµ РЅР°Р¶Р°С‚РёСЏ РєРЅРѕРїРєРё Reset, РёРЅР°С‡Рµ РІ РјР°СЃСЃРёРІРµ СЃРѕС…СЂР°РЅСЏС‚СЃСЏ СЃС‚Р°СЂС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
 	for (int x = 0; x < field_in.size(); x++)
 		for (int y = 0; y < field_in.at(x).size(); y++)
 			field_in.at(x).at(y) = 0;
 
-	// Создаем бомбы во "внутреннем" массиве
+	// РЎРѕР·РґР°РµРј Р±РѕРјР±С‹ РІРѕ "РІРЅСѓС‚СЂРµРЅРЅРµРј" РјР°СЃСЃРёРІРµ
 	for (int x = 0; x < field_in.size(); x++)
 		for (int y = 0; y < field_in.at(x).size(); y++)
 			if (std::mt19937(std::random_device{}())() % 5 == 0)
 				field_in.at(x).at(y) = 9;
 
-	// Посчитаем количество бомб и разметим ячейки "внутреннего" поля
+	// РџРѕСЃС‡РёС‚Р°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ Р±РѕРјР± Рё СЂР°Р·РјРµС‚РёРј СЏС‡РµР№РєРё "РІРЅСѓС‚СЂРµРЅРЅРµРіРѕ" РїРѕР»СЏ
 	for (int x = 0; x < field_in.size(); x++)
 		for (int y = 0; y < field_in.at(x).size(); y++)
 		{
-			// Если в ячейке бомба, то сразу перейдем к следующей итерации
+			// Р•СЃР»Рё РІ СЏС‡РµР№РєРµ Р±РѕРјР±Р°, С‚Рѕ СЃСЂР°Р·Сѓ РїРµСЂРµР№РґРµРј Рє СЃР»РµРґСѓСЋС‰РµР№ РёС‚РµСЂР°С†РёРё
 			if (field_in.at(x).at(y) == 9)
 				continue;
-			// Проверяем все ячейки вокруг текущей, если находим бомбу, то добавляем к текущей ячейке +1
+			// РџСЂРѕРІРµСЂСЏРµРј РІСЃРµ СЏС‡РµР№РєРё РІРѕРєСЂСѓРі С‚РµРєСѓС‰РµР№, РµСЃР»Рё РЅР°С…РѕРґРёРј Р±РѕРјР±Сѓ, С‚Рѕ РґРѕР±Р°РІР»СЏРµРј Рє С‚РµРєСѓС‰РµР№ СЏС‡РµР№РєРµ +1
 			for (int i = x - 1; i <= x + 1; i++)
 				for (int j = y - 1; j <= y + 1; j++)
 					if (i >= 0 && i < field_in.size() && j >= 0 && j < field_in.at(x).size() && field_in.at(i).at(j) == 9)
 						field_in.at(x).at(y)++;
 		}
 
-	// Часы
+	// Р§Р°СЃС‹
 	Clock clock;
 	clock.restart();
 	int temp_seconds = 0;
 
-	// Кнопка ресет
+	// РљРЅРѕРїРєР° СЂРµСЃРµС‚
 	Sprite sprite_reset(texture_reset);
 	sprite_reset.setPosition(5.55f * 32, 11.1f * 32);
 	sprite_reset.scale(0.8f, 0.8f);
@@ -81,7 +81,7 @@ int main()
 	while (window.isOpen())
 	{
 		window.clear();
-		// Отрисовка игрового поля ("внешнего" массива)
+		// РћС‚СЂРёСЃРѕРІРєР° РёРіСЂРѕРІРѕРіРѕ РїРѕР»СЏ ("РІРЅРµС€РЅРµРіРѕ" РјР°СЃСЃРёРІР°)
 		for (int x = 0; x < field_out.size(); x++)
 			for (int y = 0; y < field_out.at(x).size(); y++)
 			{
@@ -89,7 +89,7 @@ int main()
 				window.draw(sprites.at(field_out.at(x).at(y)));
 			}
 
-		// Проверка не окончена ли игра
+		// РџСЂРѕРІРµСЂРєР° РЅРµ РѕРєРѕРЅС‡РµРЅР° Р»Рё РёРіСЂР°
 		int game_over = fIsGameOver(600 - temp_seconds);
 		if (game_over == -1)
 		{
@@ -103,24 +103,24 @@ int main()
 			window.draw(sprite_reset);
 		}
 
-		// Вывод обратного отсчета на экран
-		// Если прошла одна секунда
+		// Р’С‹РІРѕРґ РѕР±СЂР°С‚РЅРѕРіРѕ РѕС‚СЃС‡РµС‚Р° РЅР° СЌРєСЂР°РЅ
+		// Р•СЃР»Рё РїСЂРѕС€Р»Р° РѕРґРЅР° СЃРµРєСѓРЅРґР°
 		if (temp_seconds != clock.getElapsedTime().asSeconds() && game_over == 0)
 		{
 			temp_seconds = static_cast<int>(clock.getElapsedTime().asSeconds());
 			fPrintText("Timer: " + fTime(600 - temp_seconds), font, window, 4.3f * 32, 11.f * 32);
 		}
 
-		// Обработчик событий
+		// РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕР±С‹С‚РёР№
 		fEvent(window, game_over == -1 || game_over == 1);
 
-		// Отрисовка окна
+		// РћС‚СЂРёСЃРѕРІРєР° РѕРєРЅР°
 		window.display();
 	}
 	return 0;
 }
 
-// Обработчик событий
+// РћР±СЂР°Р±РѕС‚С‡РёРє СЃРѕР±С‹С‚РёР№
 void fEvent(RenderWindow& window, bool game_over)
 {
 	Event event;
@@ -128,19 +128,19 @@ void fEvent(RenderWindow& window, bool game_over)
 	{
 		if (event.type == Event::Closed)
 			window.close();
-		// Нажатие клавишей мыши
+		// РќР°Р¶Р°С‚РёРµ РєР»Р°РІРёС€РµР№ РјС‹С€Рё
 		if (event.type == Event::MouseButtonPressed)
 		{
 			Vector2i pos = Mouse::getPosition(window);
 			int x = pos.x / 32 - 1;
 			int y = pos.y / 32 - 1;
-			// Если координаты попадают на игровое поле
+			// Р•СЃР»Рё РєРѕРѕСЂРґРёРЅР°С‚С‹ РїРѕРїР°РґР°СЋС‚ РЅР° РёРіСЂРѕРІРѕРµ РїРѕР»Рµ
 			if (x >= 0 && x < field_out.size() && y >= 0 && y < field_out.at(0).size())
 			{
-				// Левая
+				// Р›РµРІР°СЏ
 				if (event.key.code == Mouse::Left)
 					field_out.at(x).at(y) = field_in.at(x).at(y);
-				// Правая - ставит и снимает флаг
+				// РџСЂР°РІР°СЏ - СЃС‚Р°РІРёС‚ Рё СЃРЅРёРјР°РµС‚ С„Р»Р°Рі
 				if (event.key.code == Mouse::Right)
 				{
 					if (field_out.at(x).at(y) == 10)
@@ -149,7 +149,7 @@ void fEvent(RenderWindow& window, bool game_over)
 						field_out.at(x).at(y) = 10;
 				}
 			}
-			// Если координаты не попадают на игровое поле, а игра закончена, то проверяем нажата ли кнопка ресет
+			// Р•СЃР»Рё РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅРµ РїРѕРїР°РґР°СЋС‚ РЅР° РёРіСЂРѕРІРѕРµ РїРѕР»Рµ, Р° РёРіСЂР° Р·Р°РєРѕРЅС‡РµРЅР°, С‚Рѕ РїСЂРѕРІРµСЂСЏРµРј РЅР°Р¶Р°С‚Р° Р»Рё РєРЅРѕРїРєР° СЂРµСЃРµС‚
 			else
 				if (game_over && event.key.code == Mouse::Left)
 					if (x >= 4 && x <= 5 && y == field_out.at(0).size())
@@ -161,45 +161,45 @@ void fEvent(RenderWindow& window, bool game_over)
 	}
 }
 
-// Возращает -1 если проиграли, 0 если игра еще не закончена и 1 если выиграли
+// Р’РѕР·СЂР°С‰Р°РµС‚ -1 РµСЃР»Рё РїСЂРѕРёРіСЂР°Р»Рё, 0 РµСЃР»Рё РёРіСЂР° РµС‰Рµ РЅРµ Р·Р°РєРѕРЅС‡РµРЅР° Рё 1 РµСЃР»Рё РІС‹РёРіСЂР°Р»Рё
 int fIsGameOver(int seconds)
 {
-	// Если время закончилось, то игра закончена проигрышем
+	// Р•СЃР»Рё РІСЂРµРјСЏ Р·Р°РєРѕРЅС‡РёР»РѕСЃСЊ, С‚Рѕ РёРіСЂР° Р·Р°РєРѕРЅС‡РµРЅР° РїСЂРѕРёРіСЂС‹С€РµРј
 	if (seconds <= 0)
 		return -1;
-	// Если открыли хоть одну бомбу, то игра закончена проигрышем
+	// Р•СЃР»Рё РѕС‚РєСЂС‹Р»Рё С…РѕС‚СЊ РѕРґРЅСѓ Р±РѕРјР±Сѓ, С‚Рѕ РёРіСЂР° Р·Р°РєРѕРЅС‡РµРЅР° РїСЂРѕРёРіСЂС‹С€РµРј
 	for (int x = 0; x < field_out.size(); x++)
 		for (int y = 0; y < field_out.at(x).size(); y++)
 			if (field_out.at(x).at(y) == 9)
 				return -1;
-	// Если открыли все поле, а на всех бомбах установленны флажки, то игра законченна победой
+	// Р•СЃР»Рё РѕС‚РєСЂС‹Р»Рё РІСЃРµ РїРѕР»Рµ, Р° РЅР° РІСЃРµС… Р±РѕРјР±Р°С… СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹ С„Р»Р°Р¶РєРё, С‚Рѕ РёРіСЂР° Р·Р°РєРѕРЅС‡РµРЅРЅР° РїРѕР±РµРґРѕР№
 	for (int x = 0; x < field_out.size(); x++)
 		for (int y = 0; y < field_out.at(x).size(); y++)
 		{
-			// Если остался хоть один неоткрытый элемент, то игра продолжается
+			// Р•СЃР»Рё РѕСЃС‚Р°Р»СЃСЏ С…РѕС‚СЊ РѕРґРёРЅ РЅРµРѕС‚РєСЂС‹С‚С‹Р№ СЌР»РµРјРµРЅС‚, С‚Рѕ РёРіСЂР° РїСЂРѕРґРѕР»Р¶Р°РµС‚СЃСЏ
 			if (field_out.at(x).at(y) == 10)
 				return 0;
-			// Если хоть на одной бомбе не стоит флаг, то игра продолжается
+			// Р•СЃР»Рё С…РѕС‚СЊ РЅР° РѕРґРЅРѕР№ Р±РѕРјР±Рµ РЅРµ СЃС‚РѕРёС‚ С„Р»Р°Рі, С‚Рѕ РёРіСЂР° РїСЂРѕРґРѕР»Р¶Р°РµС‚СЃСЏ
 			if (field_in.at(x).at(y) == 9)
 				if (field_out.at(x).at(y) != 11)
 					return 0;
-			// Если флаг стоит не на бомбе, то игра продолжается
+			// Р•СЃР»Рё С„Р»Р°Рі СЃС‚РѕРёС‚ РЅРµ РЅР° Р±РѕРјР±Рµ, С‚Рѕ РёРіСЂР° РїСЂРѕРґРѕР»Р¶Р°РµС‚СЃСЏ
 			if (field_in.at(x).at(y) != 9 && field_out.at(x).at(y) == 11)
 				return 0;
 		}
 	return 1;
 }
 
-// Выводит текст на экран
+// Р’С‹РІРѕРґРёС‚ С‚РµРєСЃС‚ РЅР° СЌРєСЂР°РЅ
 void fPrintText(std::string text, Font& font, RenderWindow& window, float x_correction, float y_correction)
 {
-	Text stext(text, font, 20); //текст со шрифтом 20
-	stext.setPosition(x_correction, y_correction); //корректировка сдвига текста
-	stext.setFillColor(Color::Red); //цвет красный
+	Text stext(text, font, 20); //С‚РµРєСЃС‚ СЃРѕ С€СЂРёС„С‚РѕРј 20
+	stext.setPosition(x_correction, y_correction); //РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєР° СЃРґРІРёРіР° С‚РµРєСЃС‚Р°
+	stext.setFillColor(Color::Red); //С†РІРµС‚ РєСЂР°СЃРЅС‹Р№
 	window.draw(stext);
 }
 
-// Время в секундах переводим в часы и минуты, записанные в строку
+// Р’СЂРµРјСЏ РІ СЃРµРєСѓРЅРґР°С… РїРµСЂРµРІРѕРґРёРј РІ С‡Р°СЃС‹ Рё РјРёРЅСѓС‚С‹, Р·Р°РїРёСЃР°РЅРЅС‹Рµ РІ СЃС‚СЂРѕРєСѓ
 std::string fTime(int seconds)
 {
 	std::string result;
